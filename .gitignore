@@ -89,3 +89,4 @@ ipython_config.py
 *.npz
 
 # If you want to keep sample datasets in Git, comment out the section above
+tex/
