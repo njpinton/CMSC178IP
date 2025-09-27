@@ -88,5 +88,26 @@ ipython_config.py
 *.npy
 *.npz
 
+# ========================
+# LaTeX
+# ========================
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+*.bbl
+*.blg
+*.idx
+*.ind
+*.lof
+*.lot
+*.bcf
+*.run.xml
+
 # If you want to keep sample datasets in Git, comment out the section above
-tex/
+prompt.txt
