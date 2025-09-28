@@ -168,7 +168,7 @@ def create_periodic_noise_removal_demo():
 
     plt.tight_layout()
     plt.savefig('../figures/periodic_noise_removal.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated periodic noise removal demonstration")
 
@@ -321,7 +321,7 @@ def create_medical_imaging_demo():
 
     plt.tight_layout()
     plt.savefig('../figures/medical_frequency_enhancement.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated medical imaging enhancement demonstration")
 
@@ -485,7 +485,7 @@ def create_satellite_processing_demo():
 
     plt.tight_layout()
     plt.savefig('../figures/satellite_frequency_processing.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated satellite processing demonstration")
 
@@ -645,7 +645,7 @@ def create_frequency_sharpening_demo():
 
     plt.tight_layout()
     plt.savefig('../figures/frequency_sharpening.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated frequency domain sharpening demonstration")
 

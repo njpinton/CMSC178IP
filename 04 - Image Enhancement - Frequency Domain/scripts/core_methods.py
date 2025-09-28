@@ -86,7 +86,7 @@ def create_2d_fourier_transform_demo():
 
     plt.tight_layout()
     plt.savefig('../figures/fourier_transform_2d.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated 2D Fourier Transform demonstration")
 
@@ -139,7 +139,7 @@ def create_frequency_representation_demo():
 
     plt.tight_layout()
     plt.savefig('../figures/frequency_representation.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated frequency representation demonstration")
 
@@ -233,7 +233,7 @@ def create_frequency_quadrants_demo():
 
     plt.tight_layout()
     plt.savefig('../figures/frequency_quadrants.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated frequency quadrants demonstration")
 
@@ -322,7 +322,7 @@ def create_motivation_demo():
 
     plt.tight_layout()
     plt.savefig('../figures/frequency_domain_motivation.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated frequency domain motivation demonstration")
 

@@ -124,7 +124,7 @@ def create_filter_profiles():
 
     plt.tight_layout()
     plt.savefig('../figures/low_pass_filters.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     # Save individual filter types
     # High-pass filters
@@ -150,7 +150,7 @@ def create_filter_profiles():
 
     plt.tight_layout()
     plt.savefig('../figures/high_pass_filters.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     # Band-pass filters
     fig3, axes3 = plt.subplots(2, 2, figsize=(12, 10))
@@ -189,7 +189,7 @@ def create_filter_profiles():
 
     plt.tight_layout()
     plt.savefig('../figures/band_pass_filters.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated filter profile demonstrations")
 
@@ -315,7 +315,7 @@ def create_homomorphic_filtering_demo():
 
     plt.tight_layout()
     plt.savefig('../figures/homomorphic_filtering.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated homomorphic filtering demonstration")
 
@@ -431,7 +431,7 @@ def create_wiener_filtering_demo():
 
     plt.tight_layout()
     plt.savefig('../figures/wiener_filtering.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated Wiener filtering demonstration")
 
@@ -527,7 +527,7 @@ def create_fft_algorithm_demo():
 
     plt.tight_layout()
     plt.savefig('../figures/fft_algorithm.png', bbox_inches='tight')
-    plt.show()
+    plt.close()
 
     print("✅ Generated FFT algorithm demonstration")
 

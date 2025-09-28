@@ -1,8 +1,30 @@
 \documentclass[aspectratio=169,10pt]{beamer}
 
-% Theme and colors matching course materials
-\usetheme{Madrid}
-\usecolortheme{seahorse}
+% Modern professional theme for computer vision presentation
+\usetheme{metropolis}
+\usecolortheme{default}
+
+% Custom color scheme optimized for computer vision presentation
+\definecolor{primaryblue}{RGB}{20,75,140}
+\definecolor{secondaryblue}{RGB}{70,130,180}
+\definecolor{accentorange}{RGB}{230,95,45}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{darkgray}{RGB}{45,45,45}
+
+% Metropolis color customization
+\setbeamercolor{progress bar}{fg=primaryblue,bg=lightgray}
+\setbeamercolor{title separator}{fg=primaryblue}
+\setbeamercolor{progress bar in head/foot}{fg=primaryblue}
+\setbeamercolor{progress bar in section page}{fg=primaryblue}
+\setbeamercolor{frametitle}{bg=primaryblue,fg=white}
+\setbeamercolor{title}{fg=primaryblue}
+\setbeamercolor{subtitle}{fg=secondaryblue}
+\setbeamercolor{structure}{fg=primaryblue}
+\setbeamercolor{alerted text}{fg=accentorange}
+\setbeamercolor{block title}{bg=primaryblue,fg=white}
+\setbeamercolor{block body}{bg=lightgray,fg=darkgray}
+\setbeamercolor{block title alerted}{bg=accentorange,fg=white}
+\setbeamercolor{block body alerted}{bg=lightgray,fg=darkgray}
 
 % Enhanced packages for mathematical rigor
 \usepackage{amsmath,amssymb,amsfonts}
@@ -17,11 +39,11 @@
 \setbeamertemplate{footline}[frame number]
 
 % Title information
-\title{Image Enhancement in the Frequency Domain}
-\subtitle{CMSC 178IP - Comprehensive Study Guide}
-\author{Digital Image Processing Course}
-\institute{Computer Science Department}
-\date{\today}
+\title{Frequency Domain Image Enhancement}
+\subtitle{CMSC 178IP - Digital Image Processing}
+\author{Noel Jeffrey Pinton}
+\institute{University of the Philippines - Cebu\\Department of Computer Science}
+\date{}
 
 \begin{document}
 
@@ -39,741 +61,591 @@
 
 \begin{frame}{What is Frequency Domain Enhancement?}
 \begin{alertblock}{Definition}
-Frequency domain enhancement processes images by transforming them to the frequency domain, applying filters, and transforming back to the spatial domain.
+Frequency domain enhancement processes images by transforming to frequency domain, applying filters, and transforming back.
 \end{alertblock}
 
 \textbf{Mathematical Foundation:}
 $$g(x,y) = \mathcal{F}^{-1}\{H(u,v) \cdot F(u,v)\}$$
 
-Where:
-\begin{itemize}
-\item $f(x,y)$ = input image
-\item $g(x,y)$ = output (enhanced) image
-\item $F(u,v) = \mathcal{F}\{f(x,y)\}$ = Fourier transform of input
-\item $H(u,v)$ = frequency domain filter
-\item $\mathcal{F}^{-1}$ = inverse Fourier transform
-\end{itemize}
-
-\textbf{Key Advantages:}
-\begin{itemize}
-\item Direct frequency manipulation
-\item Efficient filtering of periodic noise
-\item Theoretical foundation for filter design
-\item Insight into image frequency content
-\end{itemize}
+Where: $f(x,y)$ = input, $g(x,y)$ = output, $H(u,v)$ = filter
 \end{frame}
 
-\begin{frame}{Problem Setup and Motivation}
-\textbf{Why frequency domain enhancement?}
-
+\begin{frame}{Why Use Frequency Domain?}
 \begin{columns}
-\column{0.6\textwidth}
-\textbf{Spatial Domain Limitations:}
+\column{0.5\textwidth}
+\textbf{Advantages:}
 \begin{itemize}
-\item Convolution can be computationally expensive
-\item Difficult to remove specific frequency components
-\item Limited insight into periodic patterns
-\item Complex filter design for specific frequencies
-\end{itemize}
-
-\textbf{Frequency Domain Advantages:}
-\begin{itemize}
-\item Multiplication instead of convolution
-\item Direct frequency component manipulation
-\item Efficient removal of periodic noise
-\item Clear visualization of frequency content
+\item Direct frequency manipulation
+\item Efficient periodic noise removal
 \item FFT enables fast computation
+\item Clear frequency visualization
 \end{itemize}
 
-\column{0.4\textwidth}
-\includegraphics[width=\textwidth]{../figures/frequency_domain_motivation.png}\\
-\centering{\small Spatial vs frequency domain representation}
+\column{0.5\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/frequency_domain_motivation.png}
+\end{center}
 \end{columns}
+\end{frame}
+
+\section{Step-by-Step Algorithm}
+
+\begin{frame}{Frequency Domain Enhancement Algorithm}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
+\Input{Original image $f(x,y)$ of size $M \times N$}
+\Output{Enhanced image $g(x,y)$}
+\BlankLine
+\textbf{Step 1:} Pre-process image (zero-padding if needed)\;
+\textbf{Step 2:} Center the transform: $f_c(x,y) = f(x,y) \cdot (-1)^{x+y}$\;
+\textbf{Step 3:} Compute 2D FFT: $F(u,v) = \mathcal{F}\{f_c(x,y)\}$\;
+\textbf{Step 4:} Design filter $H(u,v)$ based on enhancement goal\;
+\textbf{Step 5:} Apply filter: $G(u,v) = H(u,v) \cdot F(u,v)$\;
+\textbf{Step 6:} Compute inverse FFT: $g_c(x,y) = \mathcal{F}^{-1}\{G(u,v)\}$\;
+\textbf{Step 7:} De-center: $g(x,y) = \text{Re}\{g_c(x,y) \cdot (-1)^{x+y}\}$\;
+\textbf{Step 8:} Post-process (crop, normalize intensity)\;
+\end{algorithm}
+\end{frame}
+
+\begin{frame}{Algorithm Implementation Considerations}
+\textbf{Critical Implementation Details:}
+\begin{itemize}
+\item \textbf{Zero-padding:} Prevent wraparound artifacts
+\item \textbf{Centering:} Move DC component to center for filter design
+\item \textbf{Filter symmetry:} Ensure real output for real input
+\item \textbf{Numerical precision:} Handle floating-point errors
+\item \textbf{Memory management:} Optimize for large images
+\end{itemize}
+
+\vspace{0.5cm}
+\textbf{Common Pitfalls:}
+\begin{itemize}
+\item Forgetting to center the spectrum
+\item Not handling complex number precision
+\item Improper filter normalization
+\item Ignoring boundary effects
+\end{itemize}
 \end{frame}
 
 \section{Core Theory}
 
 \begin{frame}{2D Fourier Transform}
 \begin{columns}
-\begin{column}{0.55\textwidth}
-\begin{alertblock}{Continuous 2D Fourier Transform}
-Forward Transform:
-$$F(u,v) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y) e^{-j2\pi(ux+vy)} dx dy$$
-
-Inverse Transform:
-$$f(x,y) = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} F(u,v) e^{j2\pi(ux+vy)} du dv$$
-\end{alertblock}
-
-\textbf{Discrete 2D Fourier Transform (DFT):}
+\column{0.5\textwidth}
+\textbf{DFT Definition:}
 $$F(u,v) = \frac{1}{MN} \sum_{x=0}^{M-1} \sum_{y=0}^{N-1} f(x,y) e^{-j2\pi(ux/M + vy/N)}$$
 
-Where $u = 0,1,\ldots,M-1$ and $v = 0,1,\ldots,N-1$
-\end{column}
-\begin{column}{0.4\textwidth}
-\includegraphics[width=\textwidth]{../figures/fourier_transform_2d.png}\\
-\centering{\small 2D Fourier transform visualization}
-\end{column}
+\textbf{Properties:}
+\begin{itemize}
+\item Complex coefficients
+\item Periodic spectrum
+\item DC at center
+\end{itemize}
+
+\column{0.5\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/fourier_transform_2d.png}
+\end{center}
 \end{columns}
 \end{frame}
 
 \begin{frame}{Frequency Representation}
 \begin{columns}
-\begin{column}{0.5\textwidth}
+\column{0.5\textwidth}
 \textbf{Magnitude and Phase:}
 $$|F(u,v)| = \sqrt{R^2(u,v) + I^2(u,v)}$$
 $$\phi(u,v) = \arctan\left(\frac{I(u,v)}{R(u,v)}\right)$$
 
-Where $R(u,v)$ and $I(u,v)$ are real and imaginary parts.
-
 \textbf{Power Spectrum:}
 $$P(u,v) = |F(u,v)|^2$$
 
-\textbf{Frequency Domain Properties:}
-\begin{itemize}
-\item Low frequencies → smooth variations
-\item High frequencies → edges and details
-\item Phase → spatial information
-\item Magnitude → frequency content strength
-\end{itemize}
-\end{column}
-\begin{column}{0.45\textwidth}
-\includegraphics[width=\textwidth]{../figures/frequency_representation.png}\\
-\centering{\small Magnitude and phase spectra}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Frequency Domain Characteristics}
-\textbf{Frequency Quadrants:}
-
-\begin{columns}
 \column{0.5\textwidth}
-\begin{itemize}
-\item \textbf{DC Component:} $F(0,0)$ = average intensity
-\item \textbf{Low frequencies:} Near origin, smooth variations
-\item \textbf{High frequencies:} Away from origin, fine details
-\item \textbf{Symmetry:} $F(u,v) = F^*(-u,-v)$ for real images
-\end{itemize}
-
-\textbf{Frequency Interpretation:}
-\begin{align}
-u &= \text{horizontal frequency} \\
-v &= \text{vertical frequency} \\
-\sqrt{u^2 + v^2} &= \text{radial frequency}
-\end{align}
-
-\column{0.45\textwidth}
-\includegraphics[width=\textwidth]{../figures/frequency_quadrants.png}\\
-\centering{\small Frequency domain quadrants and interpretation}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/frequency_representation.png}
+\end{center}
 \end{columns}
 \end{frame}
 
-\section{Methods and Algorithms}
+\begin{frame}{Computational Complexity Analysis}
+\begin{columns}
+\column{0.6\textwidth}
+\textbf{Time Complexity Comparison:}
+\begin{itemize}
+\item \textbf{Direct DFT:} $O(M^2N^2)$ for $M \times N$ image
+\item \textbf{FFT:} $O(MN \log(MN))$ - dramatic improvement!
+\item \textbf{Spatial convolution:} $O(MNK^2)$ for $K \times K$ kernel
+\item \textbf{Frequency multiplication:} $O(MN)$
+\end{itemize}
+
+\textbf{Memory Requirements:}
+\begin{itemize}
+\item Original image: $MN$ (real values)
+\item Frequency domain: $2MN$ (complex values)
+\item Working memory: $\sim 4MN$ total
+\end{itemize}
+
+\column{0.4\textwidth}
+\textbf{Break-even Point:}
+
+For kernel size $K$:
+$$K > \sqrt{\log(MN)}$$
+
+\textbf{Example:}
+
+$512 \times 512$ image:
+$K > 3.3$ pixels
+
+FFT becomes efficient for kernels $\geq 4 \times 4$
+\end{columns}
+\end{frame}
+
+\section{Filtering Methods}
 
 \begin{frame}{Low-Pass Filtering}
 \begin{columns}
-\begin{column}{0.55\textwidth}
-\textbf{Purpose:} Remove high-frequency components (noise, fine details)
+\column{0.5\textwidth}
+\textbf{Purpose:} Remove high frequencies (noise, details)
 
-\textbf{Ideal Low-Pass Filter:}
+\textbf{Ideal Filter:}
 $$H(u,v) = \begin{cases}
 1 & \text{if } D(u,v) \leq D_0 \\
 0 & \text{if } D(u,v) > D_0
 \end{cases}$$
 
-Where $D(u,v) = \sqrt{(u-M/2)^2 + (v-N/2)^2}$
+\textbf{Gaussian Filter:}
+$$H(u,v) = e^{-D^2(u,v)/(2D_0^2)}$$
 
-\textbf{Butterworth Low-Pass Filter:}
-$$H(u,v) = \frac{1}{1 + \left[\frac{D(u,v)}{D_0}\right]^{2n}}$$
-
-\textbf{Gaussian Low-Pass Filter:}
-$$H(u,v) = e^{-\frac{D^2(u,v)}{2D_0^2}}$$
-\end{column}
-\begin{column}{0.4\textwidth}
-\includegraphics[width=\textwidth]{../figures/low_pass_filters.png}\\
-\centering{\small Low-pass filter profiles and effects}
-\end{column}
+\column{0.5\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/low_pass_filters.png}
+\end{center}
 \end{columns}
 \end{frame}
 
 \begin{frame}{High-Pass Filtering}
 \begin{columns}
-\begin{column}{0.55\textwidth}
-\textbf{Purpose:} Enhance edges and fine details, remove smooth variations
+\column{0.5\textwidth}
+\textbf{Purpose:} Enhance edges and details
 
-\textbf{Ideal High-Pass Filter:}
-$$H(u,v) = \begin{cases}
-0 & \text{if } D(u,v) \leq D_0 \\
-1 & \text{if } D(u,v) > D_0
-\end{cases}$$
-
-\textbf{Butterworth High-Pass Filter:}
-$$H(u,v) = \frac{1}{1 + \left[\frac{D_0}{D(u,v)}\right]^{2n}}$$
-
-\textbf{Gaussian High-Pass Filter:}
-$$H(u,v) = 1 - e^{-\frac{D^2(u,v)}{2D_0^2}}$$
+\textbf{High-pass Filter:}
+$$H_{hp}(u,v) = 1 - H_{lp}(u,v)$$
 
 \textbf{High-Frequency Emphasis:}
 $$H_{hfe}(u,v) = a + b \cdot H_{hp}(u,v)$$
-\end{column}
-\begin{column}{0.4\textwidth}
-\includegraphics[width=\textwidth]{../figures/high_pass_filters.png}\\
-\centering{\small High-pass filter profiles and edge enhancement}
-\end{column}
+
+\column{0.5\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/high_pass_filters.png}
+\end{center}
 \end{columns}
 \end{frame}
 
-\begin{frame}{Band-Pass Filtering}
+\begin{frame}{Band-Pass and Band-Reject Filtering}
 \begin{columns}
-\begin{column}{0.55\textwidth}
-\textbf{Purpose:} Pass specific frequency ranges, useful for periodic noise removal
-
-\textbf{Band-Pass Filter:}
-$$H_{bp}(u,v) = H_{hp1}(u,v) \cdot H_{lp2}(u,v)$$
-
-Where $H_{hp1}$ has cutoff $D_1$ and $H_{lp2}$ has cutoff $D_2 > D_1$
+\column{0.6\textwidth}
+\textbf{Band-Pass Filter Design:}
+$$H_{bp}(u,v) = \begin{cases}
+1 & \text{if } D_1 \leq D(u,v) \leq D_2 \\
+0 & \text{otherwise}
+\end{cases}$$
 
 \textbf{Band-Reject (Notch) Filter:}
 $$H_{br}(u,v) = 1 - H_{bp}(u,v)$$
 
-\textbf{Selective Frequency Filtering:}
-\begin{align}
-H_{notch}(u,v) &= \prod_{k} H_k(u,v) \\
-H_k(u,v) &= \frac{1}{1 + \left[\frac{D_k \cdot W}{D_k^2(u,v) - D_0^2}\right]^{2n}}
-\end{align}
+\textbf{Gaussian Band-Pass:}
+$$H(u,v) = e^{-\frac{(D(u,v)-D_0)^2}{2W^2}}$$
 
-For multiple notch frequencies $D_0^{(k)}$
-\end{column}
-\begin{column}{0.4\textwidth}
-\includegraphics[width=\textwidth]{../figures/band_pass_filters.png}\\
-\centering{\small Band-pass and band-reject filter characteristics}
-\end{column}
-\end{columns}
-\end{frame}
+Where $W$ is the bandwidth parameter.
 
-\begin{frame}{Fast Fourier Transform (FFT)}
-\textbf{Computational Efficiency:}
-
-\begin{columns}
-\column{0.6\textwidth}
-\textbf{DFT Complexity:} $O(N^4)$ for $N \times N$ image
-\textbf{FFT Complexity:} $O(N^2 \log N)$ for $N \times N$ image
-
-\textbf{FFT Requirements:}
+\column{0.4\textwidth}
+\textbf{Applications:}
 \begin{itemize}
-\item Image dimensions must be powers of 2
-\item Zero-padding for arbitrary sizes
-\item Periodic boundary assumptions
+\item Remove periodic noise patterns
+\item Enhance specific texture frequencies
+\item Isolate signal frequencies
+\item Remove scanner artifacts
 \end{itemize}
 
-\textbf{2D FFT Implementation:}
-\begin{enumerate}
-\item Apply 1D FFT to each row
-\item Apply 1D FFT to each column of result
-\end{enumerate}
-
-\textbf{Frequency Domain Filtering Steps:}
-\begin{enumerate}
-\item Preprocess: center spectrum using $(-1)^{x+y}$
-\item Compute FFT: $F(u,v) = \text{FFT}\{f(x,y)\}$
-\item Apply filter: $G(u,v) = H(u,v) \cdot F(u,v)$
-\item Inverse FFT: $g(x,y) = \text{IFFT}\{G(u,v)\}$
-\item Postprocess: extract real part, re-center
-\end{enumerate}
-
-\column{0.35\textwidth}
-\includegraphics[width=\textwidth]{../figures/fft_algorithm.png}\\
-\centering{\small FFT algorithm complexity comparison}
+\vspace{0.5cm}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/band_pass_filters.png}
+\end{center}
 \end{columns}
 \end{frame}
 
-\section{Applications}
+\begin{frame}{Filter Comparison and Selection}
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Filter Type} & \textbf{Sharpness} & \textbf{Ringing} & \textbf{Smoothness} & \textbf{Best Use} \\
+\hline
+Ideal & High & High & Low & Theoretical analysis \\
+Butterworth & Medium & Medium & Medium & General purpose \\
+Gaussian & Low & Low & High & Noise reduction \\
+Chebyshev & High & Medium & Low & Sharp cutoffs \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.5cm}
+\textbf{Selection Guidelines:}
+\begin{itemize}
+\item \textbf{Gaussian:} When smoothness is critical (medical imaging)
+\item \textbf{Butterworth:} Good balance for most applications
+\item \textbf{Ideal:} When sharp frequency cutoff needed (notch filtering)
+\item \textbf{Order selection:} Higher order = sharper transition, more ringing
+\end{itemize}
+\end{frame}
+
+\section{Advanced Techniques}
+
+\begin{frame}{Homomorphic Filtering}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Purpose:} Separate illumination and reflectance
+
+\textbf{Process:}
+\begin{enumerate}
+\item Take logarithm
+\item Apply FFT
+\item Filter with $H(u,v)$
+\item Inverse FFT
+\item Take exponential
+\end{enumerate}
+
+\column{0.5\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/homomorphic_filtering.png}
+\end{center}
+\end{columns}
+\end{frame}
 
 \begin{frame}{Periodic Noise Removal}
 \begin{columns}
-\begin{column}{0.45\textwidth}
-\textbf{Problem:} Regular patterns in images due to:
+\column{0.5\textwidth}
+\textbf{Notch Filtering:}
 \begin{itemize}
-\item Electrical interference
-\item Mechanical vibrations
-\item Scanning artifacts
-\item Aliasing effects
-\end{itemize}
-
-\textbf{Solution Approach:}
-\begin{enumerate}
-\item Analyze frequency spectrum
-\item Identify periodic noise peaks
+\item Identify noise peaks in spectrum
 \item Design notch filters
-\item Apply selective filtering
-\end{enumerate}
+\item Remove specific frequencies
+\item Preserve image content
+\end{itemize}
 
-\textbf{Notch Filter Design:}
-$$H(u,v) = \prod_{k=1}^{Q} H_{Nk}(u,v) H_{N(-k)}(u,v)$$
+\textbf{Applications:}
+\begin{itemize}
+\item Power line interference
+\item Scanning artifacts
+\item Moiré patterns
+\end{itemize}
 
-Where $H_{Nk}$ removes frequency components at $(u_k, v_k)$
-\end{column}
-\begin{column}{0.5\textwidth}
-\includegraphics[width=\textwidth]{../figures/periodic_noise_removal.png}\\
-\centering{\small Periodic noise identification and removal}
-\end{column}
+\column{0.5\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/periodic_noise_removal.png}
+\end{center}
 \end{columns}
 \end{frame}
 
-\begin{frame}{Image Sharpening in Frequency Domain}
+\begin{frame}{Unsharp Masking in Frequency Domain}
 \begin{columns}
-\begin{column}{0.45\textwidth}
-\textbf{High-Frequency Emphasis:}
-$$H_{hfe}(u,v) = a + b \cdot H_{hp}(u,v)$$
+\column{0.5\textwidth}
+\textbf{Traditional Unsharp Masking:}
+$$g(x,y) = f(x,y) + k \cdot [f(x,y) - f_{blur}(x,y)]$$
 
-Where $a \geq 0$, $b > 0$
+\textbf{Frequency Domain Equivalent:}
+$$G(u,v) = F(u,v) \cdot [1 + k(1 - H_{lp}(u,v))]$$
 
-\textbf{Advantages over Spatial Methods:}
+\textbf{Advantages:}
 \begin{itemize}
-\item Direct frequency control
-\item Flexible filter design
-\item Efficient for large images
-\item Multiple frequency bands
+\item Controllable frequency-specific enhancement
+\item No spatial artifacts
+\item Efficient for large kernels
+\item Precise frequency control
 \end{itemize}
 
-\textbf{Homomorphic Filtering:}
-$$\ln[g(x,y)] = \ln[i(x,y)] + \ln[r(x,y)]$$
+\column{0.5\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/frequency_sharpening.png}
+\end{center}
 
-Separate illumination and reflectance in frequency domain:
-\begin{enumerate}
-\item $\ln$ transform
-\item FFT
-\item Filter design: $H(u,v)$
-\item IFFT
-\item Exponential
-\end{enumerate}
-\end{column}
-\begin{column}{0.5\textwidth}
-\includegraphics[width=\textwidth]{../figures/frequency_sharpening.png}\\
-\centering{\small High-frequency emphasis and homomorphic filtering}
-\end{column}
+\textbf{Parameter Guidelines:}
+\begin{itemize}
+\item $k = 0.5-2.0$ for general enhancement
+\item $D_0 = 0.1-0.3$ of image diagonal
+\item Higher $k$ → stronger enhancement
+\item Lower $D_0$ → sharper enhancement
+\end{itemize}
 \end{columns}
 \end{frame}
 
-\begin{frame}{Medical Image Enhancement}
+\section{Real-World Applications}
+
+\begin{frame}{Satellite Image Enhancement}
 \begin{columns}
-\begin{column}{0.45\textwidth}
-\textbf{Applications in Medical Imaging:}
+\column{0.5\textwidth}
+\textbf{Challenges:}
 \begin{itemize}
-\item X-ray image enhancement
-\item MRI noise reduction
-\item Ultrasound speckle removal
-\item CT artifact correction
-\end{itemize}
-
-\textbf{Frequency Domain Benefits:}
-\begin{itemize}
-\item Precise noise frequency targeting
-\item Preservation of diagnostic features
-\item Quantitative filter specification
-\item Minimal spatial artifacts
-\end{itemize}
-
-\textbf{Example: X-ray Enhancement}
-\begin{enumerate}
-\item Identify noise frequencies
-\item Design adaptive filters
-\item Apply frequency-selective enhancement
-\item Preserve bone/tissue contrast
-\end{enumerate}
-\end{column}
-\begin{column}{0.5\textwidth}
-\includegraphics[width=\textwidth]{../figures/medical_frequency_enhancement.png}\\
-\centering{\small Medical image frequency domain enhancement}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Satellite and Remote Sensing}
-\begin{columns}
-\begin{column}{0.45\textwidth}
-\textbf{Remote Sensing Challenges:}
-\begin{itemize}
-\item Atmospheric distortion
-\item Sensor noise patterns
-\item Periodic interference
+\item Atmospheric scattering
+\item Sensor noise and artifacts
+\item Uneven illumination
+\item Compression artifacts
 \item Multi-spectral alignment
 \end{itemize}
 
 \textbf{Frequency Domain Solutions:}
 \begin{itemize}
-\item Atmospheric correction filters
-\item Sensor pattern noise removal
-\item Radiometric enhancement
-\item Spectral band optimization
+\item \textbf{Wiener filtering:} Optimal noise reduction
+\item \textbf{Homomorphic filtering:} Illumination correction
+\item \textbf{Notch filtering:} Remove sensor artifacts
+\item \textbf{Directional filtering:} Enhance linear features
 \end{itemize}
 
-\textbf{Preprocessing Pipeline:}
-\begin{enumerate}
-\item Radiometric calibration
-\item Frequency domain denoising
-\item Atmospheric correction
-\item Multi-spectral registration
-\item Feature enhancement
-\end{enumerate}
-\end{column}
-\begin{column}{0.5\textwidth}
-\includegraphics[width=\textwidth]{../figures/satellite_frequency_processing.png}\\
-\centering{\small Satellite image frequency domain processing}
-\end{column}
-\end{columns}
-\end{frame}
+\column{0.5\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/satellite_frequency_processing.png}
+\end{center}
 
-\section{Advanced Topics}
-
-\begin{frame}{Homomorphic Filtering}
-\begin{columns}
-\begin{column}{0.55\textwidth}
-\textbf{Illumination-Reflectance Model:}
-$$f(x,y) = i(x,y) \cdot r(x,y)$$
-
-Where:
+\textbf{Case Study: Landsat 8}
 \begin{itemize}
-\item $i(x,y)$ = illumination component (low frequency)
-\item $r(x,y)$ = reflectance component (high frequency)
+\item Remove 60Hz power line interference
+\item Enhance road and river networks
+\item Correct atmospheric haze
+\item Multi-band registration
 \end{itemize}
-
-\textbf{Logarithmic Transformation:}
-$$z(x,y) = \ln[f(x,y)] = \ln[i(x,y)] + \ln[r(x,y)]$$
-
-\textbf{Frequency Domain Processing:}
-$$Z(u,v) = I(u,v) + R(u,v)$$
-
-\textbf{Homomorphic Filter:}
-$$H(u,v) = (\gamma_H - \gamma_L)\left[1 - e^{-c[\frac{D^2(u,v)}{D_0^2}]}\right] + \gamma_L$$
-
-Where $\gamma_L < 1$ (compress illumination), $\gamma_H > 1$ (enhance reflectance)
-\end{column}
-\begin{column}{0.4\textwidth}
-\includegraphics[width=\textwidth]{../figures/homomorphic_filtering.png}\\
-\centering{\small Homomorphic filtering process and results}
-\end{column}
 \end{columns}
 \end{frame}
 
-\begin{frame}{Wiener Filtering}
-\begin{columns}
-\begin{column}{0.55\textwidth}
-\textbf{Degradation Model:}
-$$g(x,y) = h(x,y) * f(x,y) + n(x,y)$$
-
-In frequency domain:
-$$G(u,v) = H(u,v)F(u,v) + N(u,v)$$
-
-\textbf{Wiener Filter:}
-$$\hat{F}(u,v) = \left[\frac{H^*(u,v)}{|H(u,v)|^2 + \frac{S_n(u,v)}{S_f(u,v)}}\right] G(u,v)$$
-
-Where:
-\begin{itemize}
-\item $H^*(u,v)$ = complex conjugate of degradation
-\item $S_n(u,v)$ = noise power spectrum
-\item $S_f(u,v)$ = original image power spectrum
-\end{itemize}
-
-\textbf{Simplified Form (constant ratio):}
-$$\hat{F}(u,v) = \frac{H^*(u,v)}{|H(u,v)|^2 + K} G(u,v)$$
-\end{column}
-\begin{column}{0.4\textwidth}
-\includegraphics[width=\textwidth]{../figures/wiener_filtering.png}\\
-\centering{\small Wiener filter restoration results}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Selective Filtering and Masking}
-\begin{columns}
-\begin{column}{0.55\textwidth}
-\textbf{Selective Frequency Removal:}
-
-\textbf{Interactive Frequency Editing:}
-\begin{enumerate}
-\item Display magnitude spectrum
-\item Identify unwanted frequencies
-\item Create binary masks
-\item Apply selective filtering
-\end{enumerate}
-
-\textbf{Automated Detection:}
-$$\text{Peak}(u,v) = \begin{cases}
-1 & \text{if } |F(u,v)| > T \cdot \text{median}(|F|) \\
-0 & \text{otherwise}
-\end{cases}$$
-
-\textbf{Morphological Mask Refinement:}
-\begin{itemize}
-\item Dilation for connected components
-\item Erosion for noise removal
-\item Gaussian smoothing for gradual transitions
-\end{itemize}
-
-\textbf{Quality Preservation:}
-$$H_{smooth}(u,v) = H_{binary}(u,v) * G_{\sigma}(u,v)$$
-\end{column}
-\begin{column}{0.4\textwidth}
-\includegraphics[width=\textwidth]{../figures/selective_filtering.png}\\
-\centering{\small Selective frequency masking and removal}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Multi-Scale Frequency Analysis}
-\begin{columns}
-\begin{column}{0.55\textwidth}
-\textbf{Wavelet Transform Integration:}
-
-\textbf{Short-Time Fourier Transform (STFT):}
-$$F(u,v,x_0,y_0) = \int \int f(x,y)w(x-x_0,y-y_0)e^{-j2\pi(ux+vy)}dxdy$$
-
-\textbf{Gabor Filtering:}
-$$h(x,y) = g(x,y) \cdot e^{j2\pi(u_0x + v_0y)}$$
-
-Where $g(x,y)$ is a Gaussian window.
-
-\textbf{Multi-Resolution Processing:}
-\begin{enumerate}
-\item Decompose into frequency bands
-\item Process each band independently
-\item Apply scale-specific enhancements
-\item Reconstruct enhanced image
-\end{enumerate}
-
-\textbf{Adaptive Frequency Enhancement:}
-$$H_{adaptive}(u,v) = f(\text{local variance}, \text{edge strength})$$
-\end{column}
-\begin{column}{0.4\textwidth}
-\includegraphics[width=\textwidth]{../figures/multiscale_frequency.png}\\
-\centering{\small Multi-scale frequency domain analysis}
-\end{column}
-\end{columns}
-\end{frame}
-
-\section{Best Practices}
-
-\begin{frame}{Common Pitfalls and Solutions}
-\begin{alertblock}{Pitfall 1: Ringing Artifacts}
-\textbf{Problem:} Ideal filters cause oscillations near edges
-\textbf{Solution:} Use smooth filters (Gaussian, Butterworth)
-\end{alertblock}
-
-\begin{alertblock}{Pitfall 2: Frequency Leakage}
-\textbf{Problem:} Abrupt image boundaries create artifacts
-\textbf{Solution:} Apply windowing or image padding
-\end{alertblock}
-
-\begin{alertblock}{Pitfall 3: Phase Distortion}
-\textbf{Problem:} Incorrect phase handling destroys spatial relationships
-\textbf{Solution:} Use zero-phase filters or preserve phase information
-\end{alertblock}
-
-\begin{alertblock}{Pitfall 4: Over-filtering}
-\textbf{Problem:} Excessive filtering removes important details
-\textbf{Solution:} Analyze frequency content before designing filters
-\end{alertblock}
-\end{frame}
-
-\begin{frame}{Filter Design Guidelines}
-\textbf{Frequency Domain Filter Design Process:}
-
+\begin{frame}{Industrial Quality Control}
 \begin{columns}
 \column{0.5\textwidth}
-\textbf{1. Analysis Phase:}
+\textbf{Manufacturing Inspection:}
 \begin{itemize}
-\item Examine frequency spectrum
-\item Identify noise characteristics
-\item Determine desired enhancements
-\item Assess phase sensitivity
+\item \textbf{Textile defects:} Periodic pattern analysis
+\item \textbf{PCB inspection:} Trace and via detection
+\item \textbf{Surface roughness:} Texture frequency analysis
+\item \textbf{Weld quality:} Crack detection via filtering
 \end{itemize}
 
-\textbf{2. Design Phase:}
+\textbf{Frequency-Based Metrics:}
 \begin{itemize}
-\item Choose filter type and parameters
-\item Consider transition smoothness
-\item Account for computational constraints
-\item Design for minimal artifacts
+\item Power spectral density analysis
+\item Frequency domain correlation
+\item Spectral feature extraction
+\item Automated defect classification
 \end{itemize}
 
-\column{0.45\textwidth}
-\textbf{3. Implementation Phase:}
+\column{0.5\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/wiener_filtering.png}
+\end{center}
+
+\textbf{Real-Time Considerations:}
 \begin{itemize}
-\item Apply proper preprocessing
-\item Handle boundary conditions
-\item Monitor for artifacts
-\item Validate results quantitatively
+\item GPU-accelerated FFT
+\item Sliding window processing
+\item Parallel filter banks
+\item Template matching in frequency
 \end{itemize}
-
-\textbf{4. Optimization Phase:}
-\begin{itemize}
-\item Fine-tune parameters
-\item Compare with spatial methods
-\item Evaluate computational efficiency
-\item Document optimal settings
-\end{itemize}
-\end{columns}
-
-\textbf{Filter Selection Criteria:}
-\begin{itemize}
-\item \textbf{Smoothness:} Gaussian > Butterworth > Ideal
-\item \textbf{Computational cost:} Ideal < Butterworth < Gaussian
-\item \textbf{Artifact control:} Gaussian > Butterworth > Ideal
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Quality Assessment}
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\textbf{Quantitative Metrics:}
-
-\textbf{Frequency Domain Metrics:}
-\begin{align}
-\text{SNR}_{freq} &= 10\log_{10}\frac{\sum |F_{signal}|^2}{\sum |F_{noise}|^2} \\
-\text{Spectral Flatness} &= \frac{\text{geometric mean}}{\text{arithmetic mean}}
-\end{align}
-
-\textbf{Spatial Domain Validation:}
-\begin{align}
-\text{PSNR} &= 20\log_{10}\frac{255}{\sqrt{\text{MSE}}} \\
-\text{SSIM} &= \frac{(2\mu_x\mu_y + c_1)(2\sigma_{xy} + c_2)}{(\mu_x^2 + \mu_y^2 + c_1)(\sigma_x^2 + \sigma_y^2 + c_2)}
-\end{align}
-
-\textbf{Artifact Detection:}
-\begin{itemize}
-\item Ringing analysis near edges
-\item Frequency leakage assessment
-\item Phase coherence evaluation
-\end{itemize}
-\end{column}
-\begin{column}{0.45\textwidth}
-\includegraphics[width=\textwidth]{../figures/quality_assessment.png}\\
-\centering{\small Quality metrics for frequency domain enhancement}
-\end{column}
 \end{columns}
 \end{frame}
 
-\begin{frame}{Computational Considerations}
-\textbf{Performance Optimization:}
-
+\begin{frame}{Medical Imaging Enhancement}
 \begin{columns}
 \column{0.5\textwidth}
-\textbf{Memory Management:}
+\textbf{Challenges:}
 \begin{itemize}
-\item Use in-place FFT when possible
-\item Process image blocks for large images
-\item Optimize data types (float32 vs float64)
-\item Consider GPU acceleration
+\item Uneven illumination
+\item Electronic noise
+\item Periodic interference
+\item Low contrast details
 \end{itemize}
 
-\textbf{Algorithm Selection:}
+\textbf{Solutions:}
 \begin{itemize}
-\item FFT for global operations
-\item Sliding window for local analysis
-\item Separable filters when applicable
-\item Multi-threading for parallel bands
+\item Homomorphic filtering
+\item Notch filters
+\item High-frequency emphasis
+\item Adaptive enhancement
 \end{itemize}
 
-\column{0.45\textwidth}
-\textbf{Accuracy vs Speed Trade-offs:}
+\column{0.5\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/medical_frequency_enhancement.png}
+\end{center}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Image Sharpening}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Techniques:}
 \begin{itemize}
-\item Zero-padding vs circular convolution
-\item Filter order vs computation time
-\item Precision vs memory usage
-\item Real-time vs offline processing
+\item High-pass filtering
+\item High-frequency emphasis
+\item Unsharp masking
+\item Laplacian sharpening
 \end{itemize}
 
-\textbf{Implementation Tips:}
+\textbf{Benefits:}
 \begin{itemize}
-\item Pre-compute filter functions
-\item Cache frequently used transforms
-\item Use vectorized operations
-\item Profile bottleneck operations
+\item Enhanced edge definition
+\item Improved detail visibility
+\item Controllable enhancement
+\item Frequency-selective processing
+\end{itemize}
+
+\column{0.5\textwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../figures/frequency_sharpening.png}
+\end{center}
+\end{columns}
+\end{frame}
+
+\section{Implementation and Troubleshooting}
+
+\begin{frame}{Practical Implementation Tips}
+\textbf{Memory and Performance Optimization:}
+\begin{itemize}
+\item Use in-place FFT when possible (saves 50\% memory)
+\item Process large images in overlapping blocks
+\item Pre-compute filter masks for real-time applications
+\item Use GPU acceleration for FFT computations
+\end{itemize}
+
+\vspace{0.5cm}
+\textbf{Numerical Stability:}
+\begin{itemize}
+\item Handle zero-frequency components carefully
+\item Use double precision for filter design
+\item Normalize filters to prevent overflow
+\item Check for NaN/Inf values after operations
+\end{itemize}
+
+\vspace{0.5cm}
+\textbf{Quality Assessment:}
+\begin{itemize}
+\item Compare frequency spectra before/after
+\item Monitor edge preservation metrics
+\item Check for introduced artifacts
+\item Validate enhancement with ground truth
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Common Problems and Solutions}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Problem:} Ringing artifacts
+\begin{itemize}
+\item \textbf{Cause:} Sharp filter transitions
+\item \textbf{Solution:} Use Gaussian or Butterworth filters
+\item \textbf{Prevention:} Gradual filter rolloff
+\end{itemize}
+
+\textbf{Problem:} Boundary effects
+\begin{itemize}
+\item \textbf{Cause:} Circular convolution assumption
+\item \textbf{Solution:} Zero-padding or mirroring
+\item \textbf{Prevention:} Proper image extension
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Problem:} Loss of phase information
+\begin{itemize}
+\item \textbf{Cause:} Magnitude-only processing
+\item \textbf{Solution:} Preserve or estimate phase
+\item \textbf{Prevention:} Phase-aware filtering
+\end{itemize}
+
+\textbf{Problem:} Computational complexity
+\begin{itemize}
+\item \textbf{Cause:} Large image sizes
+\item \textbf{Solution:} Block processing, GPU acceleration
+\item \textbf{Prevention:} Algorithm selection based on size
 \end{itemize}
 \end{columns}
+\end{frame}
 
-\textbf{Platform Considerations:}
+\section{Discussion and Future Directions}
+
+\begin{frame}{Discussion Questions}
+\textbf{Theoretical Questions:}
+\begin{enumerate}
+\item When would you choose frequency domain over spatial domain enhancement?
+\item How does filter order affect the trade-off between sharpness and ringing?
+\item What are the implications of phase distortion in image enhancement?
+\end{enumerate}
+
+\textbf{Practical Questions:}
+\begin{enumerate}
+\item How would you design a filter to remove 60Hz electrical interference?
+\item What preprocessing steps are essential for medical image enhancement?
+\item How can you assess the quality of frequency domain enhancement objectively?
+\end{enumerate}
+
+\textbf{Application Questions:}
+\begin{enumerate}
+\item Compare homomorphic filtering vs. histogram equalization for illumination correction.
+\item Design a frequency-based approach for enhancing fingerprint images.
+\item How would you adapt these techniques for video enhancement?
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Emerging Trends and Future Work}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{Current Research Directions:}
 \begin{itemize}
-\item CPU: FFTW library optimization
-\item GPU: cuFFT for NVIDIA, clFFT for OpenCL
-\item Mobile: ARM NEON optimization
-\item Web: WebGL shaders for real-time
+\item \textbf{Deep learning integration:} Learned frequency filters
+\item \textbf{Adaptive filtering:} Content-aware frequency enhancement
+\item \textbf{Multi-scale approaches:} Wavelet-frequency hybrids
+\item \textbf{Real-time systems:} Hardware-accelerated implementations
 \end{itemize}
+
+\textbf{Emerging Applications:}
+\begin{itemize}
+\item High dynamic range (HDR) enhancement
+\item Multi-spectral and hyperspectral imaging
+\item 3D image enhancement
+\item Video super-resolution
+\end{itemize}
+
+\column{0.5\textwidth}
+\textbf{Technology Trends:}
+\begin{itemize}
+\item GPU and FPGA acceleration
+\item Cloud-based image processing
+\item Mobile device optimization
+\item Edge computing implementations
+\end{itemize}
+
+\textbf{Open Challenges:}
+\begin{itemize}
+\item Perceptual quality metrics
+\item Automatic parameter selection
+\item Robustness to image content
+\item Real-time constraint satisfaction
+\end{itemize}
+\end{columns}
 \end{frame}
 
 \section{Summary}
 
 \begin{frame}{Key Takeaways}
-\begin{columns}
-\begin{column}{0.48\textwidth}
-\textbf{Fundamental Concepts:}
+\textbf{Frequency Domain Advantages:}
 \begin{itemize}
-\item Frequency domain provides powerful enhancement tools
-\item FFT enables efficient computation
-\item Filter design requires careful consideration
-\item Phase information is critical for quality
+\item Efficient filtering via multiplication
+\item Direct frequency component manipulation
+\item FFT enables fast computation
+\item Excellent for periodic noise removal
+\item Clear insight into image frequency content
 \end{itemize}
 
-\textbf{Essential Techniques:}
+\textbf{Important Applications:}
 \begin{itemize}
-\item \textbf{Low-pass filtering:} Noise reduction
-\item \textbf{High-pass filtering:} Edge enhancement
-\item \textbf{Band-pass filtering:} Selective processing
-\item \textbf{Notch filtering:} Periodic noise removal
-\end{itemize}
-\end{column}
-\begin{column}{0.48\textwidth}
-\textbf{Best Practices:}
-\begin{itemize}
-\item Analyze frequency content first
-\item Use smooth filter transitions
-\item Validate results quantitatively
-\item Consider computational efficiency
-\end{itemize}
-
-\textbf{Advanced Applications:}
-\begin{itemize}
-\item Homomorphic filtering
-\item Wiener restoration
-\item Multi-scale analysis
-\item Adaptive enhancement
-\end{itemize}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}{Next Steps}
-\textbf{Advanced Topics to Explore:}
-\begin{itemize}
-\item Wavelet-based multi-resolution enhancement
-\item Adaptive frequency domain methods
-\item Machine learning-enhanced filtering
-\item Real-time frequency domain processing
-\end{itemize}
-
-\textbf{Integration with Other Methods:}
-\begin{itemize}
-\item Combining spatial and frequency techniques
-\item Morphological operations in frequency domain
-\item Color image frequency processing
-\item Video sequence enhancement
-\end{itemize}
-
-\textbf{Practical Applications:}
-\begin{itemize}
-\item Medical image analysis
+\item Medical image enhancement
 \item Satellite image processing
 \item Industrial quality control
-\item Scientific image analysis
-\end{itemize}
-
-\textbf{Implementation Skills:}
-\begin{itemize}
-\item FFT library optimization
-\item GPU acceleration techniques
-\item Real-time processing methods
-\item Quality assessment protocols
+\item Digital photography
 \end{itemize}
 \end{frame}
 
