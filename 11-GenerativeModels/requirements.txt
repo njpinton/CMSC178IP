@@ -1,0 +1,31 @@
+# Core dependencies
+torch>=1.9.0
+torchvision>=0.10.0
+numpy>=1.19.0
+matplotlib>=3.3.0
+scikit-learn>=0.24.0
+scipy>=1.5.0
+
+# Jupyter and notebook support
+jupyter>=1.0.0
+ipykernel>=5.3.0
+ipywidgets>=7.5.0
+
+# For neural network visualization
+tensorflow>=2.8.0
+keras>=2.8.0
+visualkeras>=0.0.2
+pillow>=8.0.0
+
+# Image processing
+scikit-image>=0.17.0
+
+# For visualization and plotting
+seaborn>=0.11.0
+
+# For fetching images from Picsum
+requests>=2.25.0
+
+# Optional: For GPU support (uncomment if needed)
+# tensorflow-metal  # For Apple Silicon
+# tensorflow-gpu    # For NVIDIA GPUs

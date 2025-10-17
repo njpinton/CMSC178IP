@@ -1,0 +1,235 @@
+\documentclass[a4paper,10pt]{article}
+
+% Packages
+\usepackage[bottom=1.5in, top=1in, left=1in, right=1in]{geometry} % set smaller margins (default ~1.5in)
+\usepackage{fancyhdr}   % for header/footer customization
+\usepackage{graphicx}   % for including images
+\usepackage{fontawesome5}
+\usepackage{enumitem}
+\usepackage{multicol}
+
+\setlist{itemsep=0pt, topsep=0pt}
+
+% Header setup
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+
+% Insert logos: left and right
+\fancyhead[L]{\includegraphics[width=2.8cm]{images/upc-logo.png}}
+\fancyhead[R]{\includegraphics[width=2.8cm]{images/dcs-logo-full.png}}
+
+% Center text in header (two lines: top small, bottom main title)
+\fancyhead[C]{%
+  \textbf{\Large University of the Philippines Cebu} \\[4pt]%
+  \small College of Science \\%
+  \textbf{\small Department of Computer Science} \\%
+  \faIcon{phone} 032 232 8187 \faIcon{envelope} dcs.upcebu@up.edu.ph
+
+}
+
+% Keep horizontal line below header
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Increase top margin so body text starts clearly below the line
+\setlength{\headheight}{85pt}  % must be >= height of logos/text
+\setlength{\footskip}{25pt}    % distance from bottom of text to footer
+\setlength{\headsep}{15pt}     % distance from header to text
+
+% Footer
+\fancyfoot[C]{\thepage} % page number at center bottom
+\renewcommand{\footrulewidth}{0.4pt} % line above footer
+
+\begin{document}
+
+
+\begin{center}
+    \textbf{\Large COURSE GUIDE}
+\end{center}
+\vspace{0.5em}
+
+\begin{tabular}{ll}
+\textbf{Course Number}   & CMSC 178IP \\
+\textbf{Course Title}    & Digital Image Processing \\
+\textbf{Number of Units} & 3 units (3 hours lecture) \\
+\textbf{Instructor}      & Noel Jeffrey Pinton \\
+\end{tabular}
+
+\vspace{1.5em}
+
+\begin{center}
+    \textbf{\Large COURSE OUTLINE}
+\end{center}
+
+\begin{enumerate}[label=\Roman*.]
+    \item \textbf{Introduction}
+    \begin{enumerate}[label=\alph*.]
+        \item Overview and Applications
+        \item Digital Image Fundamentals
+        \begin{enumerate}[label=\roman*.]
+            \item Image as a 2D function $f(x, y)$
+            \item Pixels, sampling, and quantization
+            \item Image types and storage formats
+        \end{enumerate}
+    \end{enumerate}
+
+    \item \textbf{Image Formation, Representation, and Compression}
+    \begin{enumerate}[label=\alph*.]
+        \item Image Coding and Compression
+        \begin{enumerate}[label=\roman*.]
+            \item Lossless compression: Huffman, Run-length, LZW
+            \item Lossy compression: JPEG, JPEG2000, WebP
+        \end{enumerate}
+        \item Imaging Sensors and Systems
+        \begin{enumerate}[label=\roman*.]
+            \item CCD, CMOS, PET, CT
+            \item Noise sources in image acquisition
+        \end{enumerate}
+    \end{enumerate}
+
+    \item \textbf{Image Enhancement}
+    \begin{enumerate}[label=\alph*.]
+        \item Spatial Domain Methods
+        \begin{enumerate}[label=\roman*.]
+            \item Spatial filtering: smoothing, sharpening
+            \item Histogram equalization and specification
+        \end{enumerate}
+        \item Frequency Domain Methods
+        \begin{enumerate}[label=\roman*.]
+            \item 2D Fourier Transform, frequency representation
+            \item Low-pass, high-pass, band-pass filtering
+        \end{enumerate}
+        \item Noise Reduction Techniques
+        \begin{enumerate}[label=\roman*.]
+            \item Linear filtering (mean, Gaussian)
+            \item Nonlinear filtering (median, bilateral)
+        \end{enumerate}
+    \end{enumerate}
+
+    \item \textbf{Image Restoration and Geometric Processing}
+    \begin{enumerate}[label=\alph*.]
+        \item Image Filtering and Convolution
+        \begin{enumerate}[label=\roman*.]
+            \item Convolution vs. correlation
+            \item Spatial kernels: blurring, sharpening, edge enhancement
+        \end{enumerate}
+        \item Geometric Transformations
+        \begin{enumerate}[label=\roman*.]
+            \item 2D Scaling, rotation, translation, shearing
+            \item Affine and projective transformations
+            \item Image registration
+        \end{enumerate}
+    \end{enumerate}
+
+    \item \textbf{Feature Extraction and Representation}
+    \begin{enumerate}[label=\alph*.]
+        \item Edge and Line Detection
+        \begin{enumerate}[label=\roman*.]
+            \item Gradient operators (Sobel, Prewitt, Roberts)
+            \item Hough transform for lines and circles
+        \end{enumerate}
+        \item Texture and Local Features
+    \end{enumerate}
+
+    \item \textbf{Image Segmentation and Morphology}
+    \begin{enumerate}[label=\alph*.]
+        \item Segmentation Methods
+        \begin{enumerate}[label=\roman*.]
+            \item Thresholding (global, local, Otsu's method)
+            \item Region-based segmentation (region growing, watershed)
+        \end{enumerate}
+        \item Morphological Processing
+        \begin{enumerate}[label=\roman*.]
+            \item Binary morphology: erosion, dilation, opening, closing
+            \item Morphology for grayscale images
+        \end{enumerate}
+    \end{enumerate}
+
+    \item \textbf{Computer Vision and Deep Learning Approaches}
+    \begin{enumerate}[label=\alph*.]
+        \item Convolutional Neural Networks (CNNs)
+        \begin{enumerate}[label=\roman*.]
+            \item CNN architecture basics: convolution, pooling, fully connected layers
+            \item Activation functions (ReLU, sigmoid, tanh)
+            \item Pooling and subsampling
+        \end{enumerate}
+        \item Applications
+        \begin{enumerate}[label=\roman*.]
+            \item Image classification (MNIST, CIFAR-10)
+            \item Image segmentation
+            \item Object detection (YOLO, Faster R-CNN)
+        \end{enumerate}
+        \item Generative Models
+        \begin{enumerate}[label=\roman*.]
+            \item Variational Autoencoders (VAE)
+            \item Generative Adversarial Networks (GAN)
+        \end{enumerate}
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{1.5em}
+
+\newpage
+
+\section*{Group Project Guidelines -- CMSC 178IP (Digital Image Processing)}
+
+\subsection*{1. Group Formation}
+\begin{itemize}
+    \item Students should organize themselves into \textbf{groups of up to 4 members}.
+    \item Smaller groups (2--3) are allowed, but workload expectations remain the same regardless of group size.
+    \item Each group must register their members with the instructor by \textbf{Midterms week}.
+    \item Groups are encouraged to form with diverse skills (programming, mathematics, presentation skills, documentation).
+\end{itemize}
+
+\subsection*{2. Project Proposal}
+\textbf{Due by Midterms.}
+
+\noindent The proposal should include:
+\begin{enumerate}
+    \item Title and objective of the project.
+    \item Motivation: why is this problem interesting/important?
+    \item Background: relevant references (papers, applications, prior work).
+    \item Dataset to be used (must be accessible and ethical to use).
+    \item Methodology: which image processing or computer vision techniques will be applied.
+    \item Expected outcomes and possible applications.
+\end{enumerate}
+
+\subsection*{3. Project Development Process}
+
+\subsubsection*{1. Data Gathering and Preparation}
+Collect suitable image data (public datasets preferred, or self-collected with consent). Perform preprocessing (resizing, normalization, annotation if needed).
+
+\subsubsection*{2. Method Implementation}
+Implement at least two non-trivial techniques from the course (e.g., morphological processing, edge detection, CNNs). Justify parameter choices (filters, thresholds, architectures).
+
+\subsubsection*{3. Evaluation and Analysis}
+Define evaluation metrics (PSNR, SSIM, accuracy, F1-score, IoU, etc.). Critically analyze results, including strengths and limitations. Compare against baseline methods where possible.
+
+\subsection*{4. Deliverables}
+\begin{enumerate}
+    \item \textbf{Project Report} with abstract, introduction, related work, methodology, results, discussion, conclusion, and references.
+    \item \textbf{Code Repository} (Python preferred, with README and requirements) that reproduces results.
+    \item \textbf{Oral Presentation} (15--20 minutes during TBD). Each member must speak.
+\end{enumerate}
+
+\subsection*{5. Grading Breakdown}
+\begin{itemize}
+    \item Proposal: 10\%
+    \item Implementation \& Technical Depth: 30\%
+    \item Results \& Analysis: 20\%
+    \item Report (clarity, structure, rigor): 20\%
+    \item Presentation \& Delivery: 20\%
+\end{itemize}
+
+\subsection*{6. Expectations}
+\begin{itemize}
+    \item Projects should go beyond toy examples. Examples:
+    \begin{itemize}
+        \item Image denoising with classical filters vs. CNN-based denoising.
+        \item Medical image segmentation using thresholding vs. morphological operations.
+        \item Object classification using handcrafted features vs. CNN.
+    \end{itemize}
+    \item Creativity and originality are highly encouraged.
+    \item Academic integrity must be maintained: no plagiarism, proper citation, and acknowledgment of external code or datasets.
+\end{itemize}
+
+\end{document}

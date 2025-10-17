@@ -1,0 +1,10 @@
+numpy
+matplotlib
+scikit-image
+opencv-python-headless
+tensorflow
+seaborn
+torch
+torchvision
+scipy
+jupyter

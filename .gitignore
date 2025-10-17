@@ -49,7 +49,6 @@ env/
 venv/
 ENV/
 .venv/
-.ipynb_checkpoints/
 
 # ========================
 # Jupyter Notebooks
@@ -74,6 +73,7 @@ ipython_config.py
 # ========================
 .vscode/
 .idea/
+.claude/
 *.swp
 *.swo
 
@@ -94,7 +94,6 @@ ipython_config.py
 *.aux
 *.fdb_latexmk
 *.fls
-*.log
 *.nav
 *.out
 *.snm
@@ -111,3 +110,11 @@ ipython_config.py
 
 # If you want to keep sample datasets in Git, comment out the section above
 prompt.txt
+Module_Structure_Analysis.md
+images/
+
+# ========================
+# Build, Cache, and Datasets
+# ========================
+**/__pycache__/
+**/data/
